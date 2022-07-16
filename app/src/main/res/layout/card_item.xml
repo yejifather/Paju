@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="10dp"
+    app:cardCornerRadius="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- 첫줄 : 날짜 / 연락처 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txtRegDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/app_main_font"
+                android:text="2022-07-16 08:29"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/txtMemHp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/app_main_font"
+                android:text="010-1234-1234"
+                android:textSize="11sp"
+                android:layout_weight="1"
+                android:textAlignment="textEnd"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#323232"/>
+
+        <!-- 두번째 줄 : 컬럼 타이틀 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/app_main_font"
+                android:layout_weight="1"
+                android:text="제품명"
+                android:textFontWeight="700"
+                android:textSize="11sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/app_main_font"
+                android:text="결제금액"
+                android:textFontWeight="700"
+                android:textSize="11sp"
+                android:textAlignment="textEnd"/>
+        </LinearLayout>
+
+        <!-- 세번째 줄 : 데이터 타이틀 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp">
+
+            <TextView
+                android:id="@+id/txtProName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/app_main_font"
+                android:layout_weight="1"
+                android:text="닭다리 순살 간장 찜닭 외 2건"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/txtProPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/app_main_font"
+                android:text="28,900원"
+                android:textSize="13sp"
+                android:textAlignment="textEnd"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
