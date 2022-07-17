@@ -13,7 +13,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
 
-class MyFirebaseMessagingService:FirebaseMessagingService() {
+class MyFirebaseMessagingService: FirebaseMessagingService() {
     private val TAG = "로그"
 
     /**
@@ -36,14 +36,14 @@ class MyFirebaseMessagingService:FirebaseMessagingService() {
             sendNotification(remoteMessage.notification?.body)
 
             // 화면 깨우기
-            /*val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
+            val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
             @SuppressLint("InvalidWakeLockTag") val wakeLock =
                 pm.newWakeLock(
-                    PowerManager.PARTIAL_WAKE_LOCK
+                    PowerManager.FULL_WAKE_LOCK
                     or PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG"
                 )
             wakeLock.acquire(3000)
-            wakeLock.release()*/
+            wakeLock.release()
         }
     }
 

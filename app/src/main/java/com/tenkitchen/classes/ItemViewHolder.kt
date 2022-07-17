@@ -15,12 +15,12 @@ class ItemViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
     private val txtProPrice = itemView.txtProPrice
 
     init {
-        Log.d(TAG, "ItemViewHolder - init() called")
+        //Log.d(TAG, "ItemViewHolder - init() called")
     }
 
     // 데이터와 뷰를 묶는다
     fun bind( itemModel: ItemModel ){
-        Log.d(TAG, "ItemViewHolder - bind() called")
+        //Log.d(TAG, "ItemViewHolder - bind() called")
 
         txtRegDate.text = itemModel.regDate
         txtMemHp.text = itemModel.memHp

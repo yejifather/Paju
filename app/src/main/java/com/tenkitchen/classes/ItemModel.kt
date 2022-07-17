@@ -8,7 +8,7 @@ class ItemModel( var regDate: String, var memHp: String, var proName: String, va
 
     // 기본 생성자
     init {
-        Log.d(TAG, "ItemModel - init() called");
+        //Log.d(TAG, "ItemModel - init() called");
     }
 
 }
