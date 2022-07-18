@@ -6,10 +6,13 @@
         <entry key="..\:/dev/project/Kotlin/Paju/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/dev/project/Kotlin/Paju/app/src/main/res/layout/card_item.xml" value="0.553125" />
         <entry key="..\:/dev/project/Kotlin/Paju/app/src/main/res/layout/item_settlement.xml" value="0.1" />
+        <entry key="..\:/dev/projects/Kotlen/Paju/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.3165" />
+        <entry key="..\:/dev/projects/Kotlen/Paju/app/src/main/res/drawable/ic_tenkitchen_black.xml" value="0.3165" />
+        <entry key="..\:/dev/projects/Kotlen/Paju/app/src/main/res/font/app_main_font.xml" value="0.34375" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
