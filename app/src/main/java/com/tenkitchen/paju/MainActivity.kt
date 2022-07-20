@@ -1,97 +1,169 @@
 package com.tenkitchen.paju
 
-import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
-import android.os.PowerManager
 import android.util.Log
+import android.view.WindowManager
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.RemoteMessage
 import com.tenkitchen.classes.ItemAdapter
 import com.tenkitchen.classes.ItemModel
+import com.tenkitchen.classes.RetrofitManager
+import com.tenkitchen.objects.CommonUtil
+import com.tenkitchen.objects.Constants
+import com.tenkitchen.objects.Constants.TAG
+import com.tenkitchen.objects.RESPONSE_STATE
 import kotlinx.android.synthetic.main.activity_main.*
+import org.json.JSONArray
+import org.json.JSONObject
+import java.text.DecimalFormat
+import java.time.LocalDate
+
 
 class MainActivity : AppCompatActivity() {
 
-    val TAG: String = "로그";
-    var itemList = ArrayList<ItemModel>()
+    private val broadPush: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            //TODO: 푸쉬 받고 할일
+            Toast.makeText(context, "제품이 판매되었습니다.", Toast.LENGTH_LONG).show();
 
-    // 카드뷰 아이템 어댑터
-    private lateinit var itemAdapter: ItemAdapter
+            var itemAdapter: ItemAdapter = ItemAdapter()
+            getItemToServer(itemAdapter)
+        }
+    }
 
     // 뷰가 화면에 그려질때
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
-        for ( i in 1..4 ) {
-            val item = ItemModel(regDate = "2022-07-14 11:22", memHp = "010-1234-4567", proName = "닭다리 순살 간장 치킨 외 $i 건", proPrice = 13900)
-            this.itemList.add(item)
-        }
+        val br: BroadcastReceiver = AppBroadcastReceiver()
 
-//        Log.d(TAG, "itemList size 후 : ${this.itemList.size}")
+//        val filter = IntentFilter().apply {
+//            addAction(Intent.ACTION_SCREEN_ON)
+//        }
+//        registerReceiver(br, filter)
+
+        val filterPush = IntentFilter()
+        filterPush.addAction(Constants.RESIEVE_PUSH)
+        registerReceiver(broadPush, filterPush)
 
         // 어댑터 인스턴스 생성
-        itemAdapter = ItemAdapter()
-        itemAdapter.submitList(this.itemList)
-        
+        var itemAdapter: ItemAdapter = ItemAdapter()
+
         // 리사이클러뷰 설정
         recyclerView.apply{
             // 리사이클러뷰 등 설정
             layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)
-            
+
             // 어댑터 장착
             adapter = itemAdapter
         }
 
         // 리사이클러 뷰 - 당겨서 새로고침
         refreshLayout.setOnRefreshListener {
-            // 새로고침 코드를 작성
-            /*for ( i in 1..2 ) {
-                val item = ItemModel(regDate = "2022-07-16 11:22", memHp = "010-000-1111", proName = "닭다리 순살 간장 치킨 외 $i 건", proPrice = 13900)
-                this.itemList.add(item)
-            }
 
-            // 어댑터 인스턴스 생성
-            itemAdapter = ItemAdapter()
-            itemAdapter.submitList(this.itemList)
-
-            // 리사이클러뷰 설정
-            recyclerView.apply{
-                // 리사이클러뷰 등 설정
-                layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)
-
-                // 어댑터 장착
-                adapter = itemAdapter
-            }*/
-
+            getItemToServer(itemAdapter)
             refreshLayout.isRefreshing = false
         }
 
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+            if ( !task.isSuccessful ) {
+                Log.d(TAG, "onCreate: Fetching FCM registration token failed")
                 return@OnCompleteListener
             }
 
             // Get new FCM registration token
-            val token = task.result
+            val token = task.result.toString()
 
-            // Log and toast
-            val msg = token.toString()
-            Log.d(TAG, msg)
-            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+            // 푸쉬토큰 저장
+            RetrofitManager.instance.putToken(token = token, completion = {
+                responseState, responseBody ->
+
+                when(responseState) {
+                    RESPONSE_STATE.OK -> {
+                        Log.d(TAG, "api 호출 성공 : $responseBody")
+                        var result = JSONObject(responseBody)
+                        Log.d(TAG, "api 호출 성공 : ${result.get("result")}")
+                    }
+                    RESPONSE_STATE.FAILURE -> {
+                        Toast.makeText(this, "api 호출 에러", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            })
         })
 
-
+        getItemToServer(itemAdapter)
     }
 
+    override fun onResume() {
+        super.onResume()
+    }
 
-    // 서버 통신은 HttpUrlConnection, Volley, OkHttp, [Retrofit2]
-    // https://velog.io/@jini0318/Android-Retrofit2%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%9C-API-%EC%84%9C%EB%B2%84%ED%86%B5%EC%8B%A0
+    override fun onPause() {
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(broadPush)
+    }
+
+    // 서버에서 데이터 가져오기
+    private fun getItemToServer(itemAdapter: ItemAdapter) {
+
+        // 오늘 날짜 가져오기
+        var currentDate: LocalDate = LocalDate.now()
+        txtDate.text = currentDate.toString();
+
+        var itemList = ArrayList<ItemModel>()
+
+        // 판매 목록 가져오기
+        RetrofitManager.instance.getSettlementList(date = currentDate.toString(), ca_num = 3, completion = {
+                responseState, responseBody ->
+
+            when(responseState) {
+                RESPONSE_STATE.OK -> {
+                    Log.d(TAG, "api 호출 성공 : $responseBody")
+                    var list = JSONArray(responseBody);
+                    var totalBuyCount: Int = 0
+                    var totalPrice: Int = 0
+
+                    for ( i in 0 until list.length()) {
+                        val info: JSONObject = list.getJSONObject(i)
+
+                        var regDate = info.get("regDate").toString()
+                        var memHp = info.get("memHp").toString()
+                        var setNum = info.get("setNum").toString().toInt()
+                        var proName = info.get("proName").toString()
+                        var proPrice = info.get("setdPrice").toString().toInt()
+                        var buyCount = info.get("buyCount").toString().toInt()
+
+                        var item = ItemModel(regDate = regDate, memHp = memHp, setNum = setNum, proName = proName, proPrice = CommonUtil.digit2Comma(proPrice) + "원", buyCount = buyCount)
+                        itemList.add(item)
+
+                        totalPrice += proPrice
+                        totalBuyCount += buyCount
+                    }
+
+                    txtSellCount.text = "결제 ${list.length()}건 / 제품 ${totalBuyCount}개 / 매출액 ${CommonUtil.digit2Comma(totalPrice)}원"
+
+                    if ( itemList.size > 0 ) {
+                        itemAdapter.submitList(itemList);
+                    }
+                }
+                RESPONSE_STATE.FAILURE -> {
+                    Toast.makeText(this, "api 호출 에러", Toast.LENGTH_SHORT).show();
+                }
+            }
+        })
+    }
+
 }

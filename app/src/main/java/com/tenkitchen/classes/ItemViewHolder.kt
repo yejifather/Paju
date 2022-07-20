@@ -7,8 +7,6 @@ import kotlinx.android.synthetic.main.card_item.view.*
 
 class ItemViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
-    val TAG: String = "로그"
-
     private val txtRegDate = itemView.txtRegDate
     private val txtMemHp = itemView.txtMemHp
     private val txtProName = itemView.txtProName
