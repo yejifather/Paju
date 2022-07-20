@@ -2,23 +2,15 @@ package com.tenkitchen.dto
 
 import com.google.gson.annotations.SerializedName
 
-data class ResSellItemDto(
-    @SerializedName("s_time") var sTime: String,
-    @SerializedName("r_code") var rCode: Int,
-    @SerializedName("job") var job: Int
-) {
+data class Contract(var s_time: String, var r_code: Int, var job: Int ) {
     data class List(
-        @SerializedName("mem_hp") val memHp : String,
-        @SerializedName("reg_date") val regDate : String,
-        @SerializedName("pro_price") val proPrice : Int,
-        @SerializedName("set_num") val setNum : Int,
-        @SerializedName("pro_name") val proName : String
+        val mem_hp : String,
+        val reg_date : String,
+        val pro_price : Int,
+        val set_num : Int,
+        val pro_name : String
     )
 }
-
-
-
-
 
 /*
     @SerializedName("regDate") var regDate: String,
