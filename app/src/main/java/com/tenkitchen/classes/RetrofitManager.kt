@@ -23,11 +23,12 @@ class RetrofitManager {
     private val iRetrofit: IRetrofit? = RetrofitClient.getClient(API.BASE_URL)?.create(IRetrofit::class.java)
 
     // 토큰 저장
-    fun putToken(token: String?, completion: (RESPONSE_STATE, String) -> Unit) {
+    fun putToken(token: String?, ssid: String?, completion: (RESPONSE_STATE, String) -> Unit) {
 
         val pToken = token ?:""
+        val pSsid = ssid ?:""
 
-        val call = iRetrofit?.putToken(token = pToken) ?: return
+        val call = iRetrofit?.putToken(token = pToken, ssid = pSsid) ?: return
 
         call.enqueue(object: retrofit2.Callback<JsonElement>{
             override fun onResponse(call: Call<JsonElement>, response: Response<JsonElement>) {

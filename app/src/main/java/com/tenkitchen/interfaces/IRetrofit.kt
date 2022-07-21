@@ -20,6 +20,7 @@ interface IRetrofit {
     // 토큰 등록
     @PUT(API.PUT_TOKEN)
     fun putToken(
-        @Query("token") token: String)
+        @Query("token") token: String,
+        @Query("ssid") ssid: String)
     : Call<JsonElement>
 }

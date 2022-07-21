@@ -1,17 +1,23 @@
 package com.tenkitchen.paju
 
+import android.Manifest
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.ktx.messaging
 import com.tenkitchen.classes.ItemAdapter
 import com.tenkitchen.classes.ItemModel
 import com.tenkitchen.classes.RetrofitManager
@@ -22,7 +28,6 @@ import com.tenkitchen.objects.RESPONSE_STATE
 import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONArray
 import org.json.JSONObject
-import java.text.DecimalFormat
 import java.time.LocalDate
 
 
@@ -44,16 +49,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
-        val br: BroadcastReceiver = AppBroadcastReceiver()
+        //Firebase.messaging.isAutoInitEnabled = true
 
-//        val filter = IntentFilter().apply {
-//            addAction(Intent.ACTION_SCREEN_ON)
-//        }
-//        registerReceiver(br, filter)
+        /*val br: BroadcastReceiver = AppBroadcastReceiver()
 
-        val filterPush = IntentFilter()
-        filterPush.addAction(Constants.RESIEVE_PUSH)
-        registerReceiver(broadPush, filterPush)
+        val filter = IntentFilter().apply {
+            addAction(Intent.ACTION_SCREEN_ON)
+        }
+        registerReceiver(br, filter)*/
 
         // 어댑터 인스턴스 생성
         var itemAdapter: ItemAdapter = ItemAdapter()
@@ -74,17 +77,21 @@ class MainActivity : AppCompatActivity() {
             refreshLayout.isRefreshing = false
         }
 
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if ( !task.isSuccessful ) {
-                Log.d(TAG, "onCreate: Fetching FCM registration token failed")
-                return@OnCompleteListener
-            }
+        FirebaseMessaging.getInstance().subscribeToTopic("Tenkitchen").addOnCompleteListener { task ->
+            /*if (task.isSuccessful) {
+                Log.d(TAG,"구독 요청 성공")
+            } else {
+                Log.d(TAG, "구독 요청 실패")
+            }*/
 
-            // Get new FCM registration token
+            /*// Get new FCM registration token
             val token = task.result.toString()
 
+            // 기기 고유값(공장초기화 전까지 동일)
+            val ssid = Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID);
+
             // 푸쉬토큰 저장
-            RetrofitManager.instance.putToken(token = token, completion = {
+            RetrofitManager.instance.putToken(token = token, ssid = ssid, completion = {
                 responseState, responseBody ->
 
                 when(responseState) {
@@ -97,8 +104,12 @@ class MainActivity : AppCompatActivity() {
                         Toast.makeText(this, "api 호출 에러", Toast.LENGTH_SHORT).show();
                     }
                 }
-            })
-        })
+            })*/
+        }
+
+        val filterPush = IntentFilter()
+        filterPush.addAction(Constants.RESIEVE_PUSH)
+        registerReceiver(broadPush, filterPush)
 
         getItemToServer(itemAdapter)
     }
@@ -165,5 +176,4 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
-
 }
