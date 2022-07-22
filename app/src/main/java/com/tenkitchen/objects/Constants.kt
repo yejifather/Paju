@@ -16,5 +16,6 @@ object API {
     //const val BASE_URL: String = "http://192.168.0.221:18018/"
 
     const val GET_SETTLEMENT_LIST: String = "settlement"
+    const val GET_SETTLEMENT_DETAIL: String = "settlement_detail"
     const val PUT_TOKEN: String = "token"
 }

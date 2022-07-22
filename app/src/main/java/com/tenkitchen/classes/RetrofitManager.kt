@@ -23,11 +23,12 @@ class RetrofitManager {
     private val iRetrofit: IRetrofit? = RetrofitClient.getClient(API.BASE_URL)?.create(IRetrofit::class.java)
 
     // 토큰 저장
-    fun putToken(token: String?, completion: (RESPONSE_STATE, String) -> Unit) {
+    fun putToken(token: String?, ssid: String?, completion: (RESPONSE_STATE, String) -> Unit) {
 
         val pToken = token ?:""
+        val pSsid = ssid ?:""
 
-        val call = iRetrofit?.putToken(token = pToken) ?: return
+        val call = iRetrofit?.putToken(token = pToken, ssid = pSsid) ?: return
 
         call.enqueue(object: retrofit2.Callback<JsonElement>{
             override fun onResponse(call: Call<JsonElement>, response: Response<JsonElement>) {
@@ -58,6 +59,25 @@ class RetrofitManager {
             }
 
             // 응답 실패
+            override fun onFailure(call: Call<JsonElement>, t: Throwable) {
+                Log.d(TAG, "RetrofitManager - on Failure() called / t: $t")
+                completion(RESPONSE_STATE.FAILURE, t.toString())
+            }
+        })
+    }
+
+    // 구매 상세 내역 가져오기
+    fun getSettlementDetails(set_num: Int?, completion: (RESPONSE_STATE, String) -> Unit) {
+
+        val pSetNum = set_num ?:0
+
+        val call = iRetrofit?.getSettlementDetails(set_num = pSetNum) ?: return
+
+        call.enqueue(object: retrofit2.Callback<JsonElement>{
+            override fun onResponse(call: Call<JsonElement>, response: Response<JsonElement>) {
+                completion(RESPONSE_STATE.OK, response.body().toString())
+            }
+
             override fun onFailure(call: Call<JsonElement>, t: Throwable) {
                 Log.d(TAG, "RetrofitManager - on Failure() called / t: $t")
                 completion(RESPONSE_STATE.FAILURE, t.toString())

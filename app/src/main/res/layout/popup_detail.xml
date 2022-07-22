@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="410dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="15dp"
+        android:orientation="vertical"
+        android:background="@drawable/shape">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/app_main_font"
+                android:textColor="@color/black"
+                android:padding="10dp"
+                android:textSize="11dp"
+                android:textFontWeight="700"
+                android:text="결제일" />
+
+            <TextView
+                android:id="@+id/txtBuyDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/app_main_font"
+                android:textColor="@color/black"
+                android:padding="10dp"
+                android:textSize="11dp"
+                android:textFontWeight="700"
+                android:text="" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/app_main_font"
+                android:textColor="@color/black"
+                android:padding="10dp"
+                android:textSize="11dp"
+                android:textFontWeight="700"
+                android:text="구매자" />
+
+            <TextView
+                android:id="@+id/txtMemHp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/app_main_font"
+                android:textColor="@color/black"
+                android:padding="10dp"
+                android:textSize="11dp"
+                android:textFontWeight="700"
+                android:text="" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 구매 제품 정보 -->
+    <LinearLayout
+        android:id="@+id/llProductBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="5dp"
+        android:orientation="vertical"
+        android:background="@drawable/shape">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/app_main_font"
+            android:textColor="@color/black"
+            android:padding="10dp"
+            android:textSize="11dp"
+            android:textFontWeight="700"
+            android:text="구매 제품 정보" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/black"/>
+
+        <!-- body -->
+        <LinearLayout
+            android:id="@+id/llProductList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- 구매자 정보 -->
+    <LinearLayout
+        android:id="@+id/llCustomerBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:background="@drawable/shape">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/app_main_font"
+            android:textColor="@color/black"
+            android:padding="10dp"
+            android:textSize="11dp"
+            android:textFontWeight="700"
+            android:text="구매자 정보"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/black"/>
+
+        <!-- body -->
+        <LinearLayout
+            android:id="@+id/llCustomerList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 버튼 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btnConfirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/teal_700"
+            android:fontFamily="@font/app_main_font"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:text="확인"
+            android:textColor="@color/white"
+            android:textFontWeight="700"
+            android:textSize="11dp" />
+    </LinearLayout>
+
+</LinearLayout>

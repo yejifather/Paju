@@ -9,6 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#424242"
         android:orientation="vertical">
 
         <!-- 첫줄 : 날짜 / 연락처 -->
@@ -23,16 +24,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/app_main_font"
-                android:text="2022-07-16 08:29"
-                android:textSize="11sp" />
+                android:text=""
+                android:textSize="10dp"
+                android:textColor="#B1B1B1"/>
 
             <TextView
                 android:id="@+id/txtMemHp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/app_main_font"
-                android:text="010-1234-1234"
-                android:textSize="11sp"
+                android:text=""
+                android:textSize="10dp"
+                android:textColor="#B1B1B1"
                 android:layout_weight="1"
                 android:textAlignment="textEnd"/>
         </LinearLayout>
@@ -55,7 +58,8 @@
                 android:layout_weight="1"
                 android:text="제품명"
                 android:textFontWeight="700"
-                android:textSize="11sp" />
+                android:textColor="#B1B1B1"
+                android:textSize="10dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -63,7 +67,8 @@
                 android:fontFamily="@font/app_main_font"
                 android:text="결제금액"
                 android:textFontWeight="700"
-                android:textSize="11sp"
+                android:textColor="#B1B1B1"
+                android:textSize="10dp"
                 android:textAlignment="textEnd"/>
         </LinearLayout>
 
@@ -81,16 +86,18 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/app_main_font"
                 android:layout_weight="1"
-                android:text="닭다리 순살 간장 찜닭 외 2건"
-                android:textSize="13sp" />
+                android:text=""
+                android:textColor="#B7B7B7"
+                android:textSize="11dp" />
 
             <TextView
                 android:id="@+id/txtProPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/app_main_font"
-                android:text="28,900원"
-                android:textSize="13sp"
+                android:text=""
+                android:textSize="11dp"
+                android:textColor="#B7B7B7"
                 android:textAlignment="textEnd"/>
         </LinearLayout>
     </LinearLayout>
