@@ -96,6 +96,8 @@ class MyFirebaseMessagingService:FirebaseMessagingService() {
 
         val body: String = msgData.getValue(PushContents.body)
         val title: String = msgData.getValue(PushContents.title)
+
+        Log.d(TAG, "sendNotification: body : ${body}, title : ${title}")
         
         // RequestCode, Id를 고유값으로 지정하여 알림이 개별 표시되도록 함
         val uniId: Int = (System.currentTimeMillis() / 7).toInt()
@@ -126,7 +128,7 @@ class MyFirebaseMessagingService:FirebaseMessagingService() {
         var notificationBuilder = NotificationCompat.Builder(this,channelId)
             .setSmallIcon(R.drawable.ic_stat_black)
             .setLargeIcon(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher_ten_foreground))
-            .setContentTitle(title)
+            .setContentTitle("텐'키친 파주운정점")
             .setContentText(body)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
@@ -143,6 +145,7 @@ class MyFirebaseMessagingService:FirebaseMessagingService() {
 
     // NotificationChannel 만드는 메서드
     private fun createNotificationChannel(context: Context, importance: Int, showBadge: Boolean, name: String, description: String) {
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channelId = "${context.packageName}-$name"
             val channel = NotificationChannel(channelId, name, importance)
