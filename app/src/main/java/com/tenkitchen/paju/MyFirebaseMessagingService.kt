@@ -1,14 +1,16 @@
 package com.tenkitchen.paju
 
 import android.annotation.SuppressLint
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.media.AudioAttributes
 import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
 import android.provider.Settings
@@ -118,7 +120,7 @@ class MyFirebaseMessagingService:FirebaseMessagingService() {
 
         // head up 알림 생성하기
         val notificationId = 1001
-        createNotificationChannel(this, NotificationManagerCompat.IMPORTANCE_HIGH, false, getString(R.string.app_name), "App notification channel")
+        createNotificationChannel(this, NotificationManagerCompat.IMPORTANCE_HIGH, true, getString(R.string.app_name), "App notification channel")
 
         val channelId = "$packageName-${getString(R.string.app_name)}"
 
@@ -130,14 +132,14 @@ class MyFirebaseMessagingService:FirebaseMessagingService() {
             .setLargeIcon(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher_ten_foreground))
             .setContentTitle("텐'키친 파주운정점")
             .setContentText(body)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            //.setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
             .setSound(notificationSound)
             //.setContentIntent(pendingIntent)
             .setFullScreenIntent(fullScreenPendingIntent, true)
             .setSubText("좋아 좋아~!!")
             .setTimeoutAfter(8000)
-            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            //.setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
 
         var notificationManager: NotificationManager = this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(notificationId, notificationBuilder.build())
@@ -151,6 +153,17 @@ class MyFirebaseMessagingService:FirebaseMessagingService() {
             val channel = NotificationChannel(channelId, name, importance)
             channel.description = description
             channel.setShowBadge(showBadge)
+
+            val sound: Uri =
+                Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + context.packageName + "/" + R.raw.get_message)
+
+            val audioAttributes = AudioAttributes.Builder()
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .setUsage(AudioAttributes.USAGE_ALARM)
+                .build()
+            channel.enableLights(true)
+            channel.enableVibration(true)
+            channel.setSound(sound, audioAttributes)
 
             val notificationManager = context.getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel)
