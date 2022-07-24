@@ -99,7 +99,7 @@ class MyFirebaseMessagingService:FirebaseMessagingService() {
         val body: String = msgData.getValue(PushContents.body)
         val title: String = msgData.getValue(PushContents.title)
 
-        Log.d(TAG, "sendNotification: body : ${body}, title : ${title}")
+        //Log.d(TAG, "sendNotification: body : ${body}, title : ${title}")
 
         // RequestCode, Id를 고유값으로 지정하여 알림이 개별 표시되도록 함
         val uniId: Int = (System.currentTimeMillis() / 7).toInt()
@@ -108,8 +108,8 @@ class MyFirebaseMessagingService:FirebaseMessagingService() {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             action = Intent.ACTION_MAIN
             addCategory(Intent.CATEGORY_LAUNCHER)
-            putExtra("Notification", body)
-            putExtra("Notification", title)
+            //putExtra("Notification", body)
+            //putExtra("Notification", title)
         }
 
         // 일회용 PendingIntent : Intent 의 실행 권한을 외부의 어플리케이션에게 위임
@@ -127,19 +127,19 @@ class MyFirebaseMessagingService:FirebaseMessagingService() {
         val fullScreenPendingIntent = PendingIntent.getActivity(baseContext, uniId, intent, PendingIntent.FLAG_CANCEL_CURRENT)  // FLAG_CANCEL_CURRENT
 
         // 푸시알람 부가설정
-        var notificationBuilder = NotificationCompat.Builder(this,channelId)
+        var notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.ic_stat_black)
             .setLargeIcon(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher_ten_foreground))
             .setContentTitle("텐'키친 파주운정점")
             .setContentText(body)
-            //.setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
             .setSound(notificationSound)
-            //.setContentIntent(pendingIntent)
+            .setContentIntent(fullScreenPendingIntent)
             .setFullScreenIntent(fullScreenPendingIntent, true)
             .setSubText("좋아 좋아~!!")
             .setTimeoutAfter(8000)
-            //.setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
 
         var notificationManager: NotificationManager = this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(notificationId, notificationBuilder.build())
@@ -155,7 +155,7 @@ class MyFirebaseMessagingService:FirebaseMessagingService() {
             channel.setShowBadge(showBadge)
 
             val sound: Uri =
-                Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + context.packageName + "/" + R.raw.get_message)
+                Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + context.packageName + "/" + R.raw.get_message_3)
 
             val audioAttributes = AudioAttributes.Builder()
                 .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
