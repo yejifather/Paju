@@ -1,5 +1,6 @@
 package com.tenkitchen.paju
 
+import android.app.DatePickerDialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -24,12 +25,15 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONArray
 import org.json.JSONObject
 import java.time.LocalDate
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity(), IMyRecyclerview, IPopupDialog {
 
     private var m_itemAdapter: ItemAdapter? = null
     private var m_itemList: ArrayList<ItemModel>? = null
+    private var m_date: String? = ""
 
     private val broadPush: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -47,14 +51,17 @@ class MainActivity : AppCompatActivity(), IMyRecyclerview, IPopupDialog {
         setContentView(R.layout.activity_main)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
-        //Firebase.messaging.isAutoInitEnabled = true
-
         /*val br: BroadcastReceiver = AppBroadcastReceiver()
 
         val filter = IntentFilter().apply {
             addAction(Intent.ACTION_SCREEN_ON)
         }
         registerReceiver(br, filter)*/
+
+        // 기본 날짜 세팅 -
+        var currentDate: LocalDate = LocalDate.now()
+        txtDate.text = currentDate.toString();
+        m_date = currentDate.toString();
 
         // 어댑터 인스턴스 생성
         m_itemAdapter = ItemAdapter(this)
@@ -91,6 +98,27 @@ class MainActivity : AppCompatActivity(), IMyRecyclerview, IPopupDialog {
         registerReceiver(broadPush, filterPush)
 
         getItemToServer(m_itemAdapter!!)
+
+        // 날짜 클릭시
+        txtDate.setOnClickListener() {
+            Log.d(TAG, "onCreate: CLICK")
+            val cal = Calendar.getInstance()    //캘린더뷰 만들기
+            val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+                var dateString: String = ""
+
+                dateString = if ( month + 1 < 10 ) {
+                    "${year}-0${month+1}-${dayOfMonth}"
+                } else {
+                    "${year}-${month+1}-${dayOfMonth}"
+                }
+
+                m_date = dateString
+                txtDate.text = dateString
+
+                getItemToServer(m_itemAdapter!!)
+            }
+            DatePickerDialog(this, dateSetListener, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show()
+        }
     }
 
     override fun onResume() {
@@ -110,12 +138,8 @@ class MainActivity : AppCompatActivity(), IMyRecyclerview, IPopupDialog {
     // 서버에서 데이터 가져오기
     private fun getItemToServer(itemAdapter: ItemAdapter) {
 
-        // 오늘 날짜 가져오기
-        var currentDate: LocalDate = LocalDate.now()
-        txtDate.text = currentDate.toString();
-
         // 판매 목록 가져오기
-        RetrofitManager.instance.getSettlementList(date = currentDate.toString(), ca_num = 3, completion = {
+        RetrofitManager.instance.getSettlementList(date = m_date, ca_num = 3, completion = {
                 responseState, responseBody ->
 
             m_itemList?.clear()
@@ -149,6 +173,9 @@ class MainActivity : AppCompatActivity(), IMyRecyclerview, IPopupDialog {
                     //if ( itemList.size > 0 ) {
                     m_itemList?.let { itemAdapter.submitList(it) };
                     //}
+
+                    // 가장 마지막 아이템으로 이동
+                    recyclerView.scrollToPosition(m_itemList!!.size - 1)
                 }
                 RESPONSE_STATE.FAILURE -> {
                     Toast.makeText(this, "api 호출 에러", Toast.LENGTH_SHORT).show();
