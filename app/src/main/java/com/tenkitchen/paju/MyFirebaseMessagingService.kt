@@ -97,34 +97,28 @@ class MyFirebaseMessagingService:FirebaseMessagingService() {
     private fun sendNotification(msgData: Map<String, String>) {
 
         val body: String = msgData.getValue(PushContents.body)
-        val title: String = msgData.getValue(PushContents.title)
-
-        //Log.d(TAG, "sendNotification: body : ${body}, title : ${title}")
 
         // RequestCode, Id를 고유값으로 지정하여 알림이 개별 표시되도록 함
         val uniId: Int = (System.currentTimeMillis() / 7).toInt()
 
+        // 인텐트 생성
         val intent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             action = Intent.ACTION_MAIN
             addCategory(Intent.CATEGORY_LAUNCHER)
-            //putExtra("Notification", body)
-            //putExtra("Notification", title)
         }
 
         // 일회용 PendingIntent : Intent 의 실행 권한을 외부의 어플리케이션에게 위임
-        var pendingIntent = PendingIntent.getActivity(this, uniId, intent, PendingIntent.FLAG_ONE_SHOT)
+        val fullScreenPendingIntent = PendingIntent.getActivity(baseContext, uniId, intent, PendingIntent.FLAG_CANCEL_CURRENT)
 
         // 알림 소리
         val notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 
         // head up 알림 생성하기
         val notificationId = 1001
-        createNotificationChannel(this, NotificationManagerCompat.IMPORTANCE_HIGH, true, getString(R.string.app_name), "App notification channel")
+        createNotificationChannel(this, NotificationManagerCompat.IMPORTANCE_HIGH, false, getString(R.string.app_name), "App notification channel")
 
         val channelId = "$packageName-${getString(R.string.app_name)}"
-
-        val fullScreenPendingIntent = PendingIntent.getActivity(baseContext, uniId, intent, PendingIntent.FLAG_CANCEL_CURRENT)  // FLAG_CANCEL_CURRENT
 
         // 푸시알람 부가설정
         var notificationBuilder = NotificationCompat.Builder(this, channelId)
@@ -132,14 +126,11 @@ class MyFirebaseMessagingService:FirebaseMessagingService() {
             .setLargeIcon(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher_ten_foreground))
             .setContentTitle("텐'키친 파주운정점")
             .setContentText(body)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
             .setSound(notificationSound)
-            .setContentIntent(fullScreenPendingIntent)
-            .setFullScreenIntent(fullScreenPendingIntent, true)
             .setSubText("좋아 좋아~!!")
-            //.setTimeoutAfter(6000)
-            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setContentIntent(fullScreenPendingIntent)
+            .setPriority(NotificationCompat.VISIBILITY_PUBLIC)
 
         var notificationManager: NotificationManager = this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(notificationId, notificationBuilder.build())
