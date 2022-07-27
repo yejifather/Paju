@@ -99,7 +99,7 @@ class PopupDialog(context: Context, Interface: IPopupDialog, setNum: Int): Dialo
                             LinearLayout.LayoutParams.WRAP_CONTENT,
                             0.7f
                         )
-                        txtProName.setPadding(CommonUtil.intToDp(this.context, 10))
+                        txtProName.setPadding(CommonUtil.intToDp(this.context, 5))
                         txtProName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11F)
                         txtProName.setTextColor(ContextCompat.getColor(context!!, R.color.white))
                         txtProName.text = "제품명"
@@ -122,7 +122,7 @@ class PopupDialog(context: Context, Interface: IPopupDialog, setNum: Int): Dialo
                             LinearLayout.LayoutParams.WRAP_CONTENT,
                             0.1f
                         )
-                        txtOriPrice.setPadding(CommonUtil.intToDp(this.context, 10))
+                        txtOriPrice.setPadding(CommonUtil.intToDp(this.context, 5))
                         txtOriPrice.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11F)
                         txtOriPrice.setTextColor(ContextCompat.getColor(context!!, R.color.white))
                         txtOriPrice.text = "소비자가"
@@ -146,7 +146,7 @@ class PopupDialog(context: Context, Interface: IPopupDialog, setNum: Int): Dialo
                             LinearLayout.LayoutParams.WRAP_CONTENT,
                             0.1f
                         )
-                        txtDiscountRate.setPadding(CommonUtil.intToDp(this.context, 10))
+                        txtDiscountRate.setPadding(CommonUtil.intToDp(this.context, 5))
                         txtDiscountRate.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11F)
                         txtDiscountRate.setTextColor(ContextCompat.getColor(context!!, R.color.white))
                         txtDiscountRate.text = "할인"
@@ -170,7 +170,7 @@ class PopupDialog(context: Context, Interface: IPopupDialog, setNum: Int): Dialo
                             LinearLayout.LayoutParams.WRAP_CONTENT,
                             0.1f
                         )
-                        txtSetdPrice.setPadding(CommonUtil.intToDp(this.context, 10))
+                        txtSetdPrice.setPadding(CommonUtil.intToDp(this.context, 5))
                         txtSetdPrice.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11F)
                         txtSetdPrice.setTextColor(ContextCompat.getColor(context!!, R.color.white))
                         txtSetdPrice.text = "판매가"
@@ -208,7 +208,7 @@ class PopupDialog(context: Context, Interface: IPopupDialog, setNum: Int): Dialo
                                 LinearLayout.LayoutParams.WRAP_CONTENT,
                                 0.7f
                             )
-                            txtProName.setPadding(CommonUtil.intToDp(this.context, 10))
+                            txtProName.setPadding(CommonUtil.intToDp(this.context, 5))
                             txtProName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11F)
                             txtProName.setTextColor(ContextCompat.getColor(context!!, R.color.black))
                             txtProName.text = info.get("proName").toString()
@@ -231,7 +231,7 @@ class PopupDialog(context: Context, Interface: IPopupDialog, setNum: Int): Dialo
                                 LinearLayout.LayoutParams.WRAP_CONTENT,
                                 0.1f
                             )
-                            txtOriPrice.setPadding(CommonUtil.intToDp(this.context, 10))
+                            txtOriPrice.setPadding(CommonUtil.intToDp(this.context, 5))
                             txtOriPrice.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11F)
                             txtOriPrice.setTextColor(ContextCompat.getColor(context!!, R.color.black))
                             txtOriPrice.text = CommonUtil.digit2Comma(info.get("oriPrice").toString().toInt()) + "원"
@@ -255,7 +255,7 @@ class PopupDialog(context: Context, Interface: IPopupDialog, setNum: Int): Dialo
                                 LinearLayout.LayoutParams.WRAP_CONTENT,
                                 0.1f
                             )
-                            txtDiscountRate.setPadding(CommonUtil.intToDp(this.context, 10))
+                            txtDiscountRate.setPadding(CommonUtil.intToDp(this.context, 5))
                             txtDiscountRate.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11F)
                             txtDiscountRate.setTextColor(ContextCompat.getColor(context!!, R.color.black))
                             txtDiscountRate.text = info.get("discountRate").toString() + "%"
@@ -279,7 +279,7 @@ class PopupDialog(context: Context, Interface: IPopupDialog, setNum: Int): Dialo
                                 LinearLayout.LayoutParams.WRAP_CONTENT,
                                 0.1f
                             )
-                            txtSetdPrice.setPadding(CommonUtil.intToDp(this.context, 10))
+                            txtSetdPrice.setPadding(CommonUtil.intToDp(this.context, 5))
                             txtSetdPrice.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11F)
                             txtSetdPrice.setTextColor(ContextCompat.getColor(context!!, R.color.black))
                             txtSetdPrice.text = CommonUtil.digit2Comma(info.get("setdPrice").toString().toInt()) + "원"
@@ -320,7 +320,7 @@ class PopupDialog(context: Context, Interface: IPopupDialog, setNum: Int): Dialo
                             LinearLayout.LayoutParams.WRAP_CONTENT,
                             1f
                         )
-                        txtBuyDate.setPadding(CommonUtil.intToDp(this.context, 10))
+                        txtBuyDate.setPadding(CommonUtil.intToDp(this.context, 5))
                         txtBuyDate.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11F)
                         txtBuyDate.setTextColor(ContextCompat.getColor(context!!, R.color.white))
                         txtBuyDate.text = "구매일"
@@ -344,7 +344,7 @@ class PopupDialog(context: Context, Interface: IPopupDialog, setNum: Int): Dialo
                             LinearLayout.LayoutParams.WRAP_CONTENT,
                             1f
                         )
-                        txtProName.setPadding(CommonUtil.intToDp(this.context, 10))
+                        txtProName.setPadding(CommonUtil.intToDp(this.context, 5))
                         txtProName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11F)
                         txtProName.setTextColor(ContextCompat.getColor(context!!, R.color.white))
                         txtProName.text = "제품"
@@ -368,7 +368,7 @@ class PopupDialog(context: Context, Interface: IPopupDialog, setNum: Int): Dialo
                             LinearLayout.LayoutParams.WRAP_CONTENT,
                             1f
                         )
-                        txtSetdPrice.setPadding(CommonUtil.intToDp(this.context, 10))
+                        txtSetdPrice.setPadding(CommonUtil.intToDp(this.context, 5))
                         txtSetdPrice.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11F)
                         txtSetdPrice.setTextColor(ContextCompat.getColor(context!!, R.color.white))
                         txtSetdPrice.text = "결제금액"
@@ -418,7 +418,7 @@ class PopupDialog(context: Context, Interface: IPopupDialog, setNum: Int): Dialo
                                 LinearLayout.LayoutParams.WRAP_CONTENT,
                                 1f
                             )
-                            txtBuyDate.setPadding(CommonUtil.intToDp(this.context, 10))
+                            txtBuyDate.setPadding(CommonUtil.intToDp(this.context, 5))
                             txtBuyDate.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11F)
                             txtBuyDate.setTextColor(ContextCompat.getColor(context!!, R.color.black))
 
@@ -449,7 +449,7 @@ class PopupDialog(context: Context, Interface: IPopupDialog, setNum: Int): Dialo
                                 LinearLayout.LayoutParams.WRAP_CONTENT,
                                 1f
                             )
-                            txtProName.setPadding(CommonUtil.intToDp(this.context, 10))
+                            txtProName.setPadding(CommonUtil.intToDp(this.context, 5))
                             txtProName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11F)
                             txtProName.setTextColor(ContextCompat.getColor(context!!, R.color.black))
                             txtProName.text = info.get("proName").toString()
@@ -473,7 +473,7 @@ class PopupDialog(context: Context, Interface: IPopupDialog, setNum: Int): Dialo
                                 LinearLayout.LayoutParams.WRAP_CONTENT,
                                 1f
                             )
-                            txtSetdPrice.setPadding(CommonUtil.intToDp(this.context, 10))
+                            txtSetdPrice.setPadding(CommonUtil.intToDp(this.context, 5))
                             txtSetdPrice.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11F)
                             txtSetdPrice.setTextColor(ContextCompat.getColor(context!!, R.color.black))
                             txtSetdPrice.text = CommonUtil.digit2Comma(info.get("setdPrice").toString().toInt()) + "원"
