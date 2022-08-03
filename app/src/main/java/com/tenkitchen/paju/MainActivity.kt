@@ -107,9 +107,17 @@ class MainActivity : AppCompatActivity(), IMyRecyclerview, IPopupDialog {
                 var dateString: String = ""
 
                 dateString = if ( month + 1 < 10 ) {
-                    "${year}-0${month+1}-${dayOfMonth}"
+                    if ( dayOfMonth < 10 ) {
+                        "${year}-0${month+1}-0${dayOfMonth}"
+                    } else {
+                        "${year}-0${month+1}-${dayOfMonth}"
+                    }
                 } else {
-                    "${year}-${month+1}-${dayOfMonth}"
+                    if ( dayOfMonth < 10 ) {
+                        "${year}-${month+1}-0${dayOfMonth}"
+                    } else {
+                        "${year}-${month+1}-${dayOfMonth}"
+                    }
                 }
 
                 m_date = dateString
