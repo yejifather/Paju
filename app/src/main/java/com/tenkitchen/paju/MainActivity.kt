@@ -131,6 +131,12 @@ class MainActivity : AppCompatActivity(), IMyRecyclerview, IPopupDialog {
 
     override fun onResume() {
         super.onResume()
+
+        // 오늘 날짜로 다시 세팅
+        var currentDate: LocalDate = LocalDate.now()
+        txtDate.text = currentDate.toString();
+        m_date = currentDate.toString();
+        
         getItemToServer(m_itemAdapter!!);
     }
 
