@@ -65,6 +65,10 @@ dependencies {
     // 메테리얼
     implementation "com.google.android.material:material:1.1.0"
 
+    // WebSocket
+    implementation 'com.squareup.okhttp3:okhttp:3.12.6'
+    implementation 'com.squareup.okhttp3:mockwebserver:3.12.1'
+
     // 레트로핏
     def retrofit_version = "2.9.0"
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
