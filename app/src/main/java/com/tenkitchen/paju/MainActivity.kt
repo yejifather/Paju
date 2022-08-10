@@ -1,15 +1,25 @@
 package com.tenkitchen.paju
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.*
+import android.graphics.BitmapFactory
+import android.media.AudioAttributes
+import android.media.RingtoneManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
+import android.os.PowerManager
 import android.util.Log
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.messaging.FirebaseMessaging
 import com.tenkitchen.classes.ItemAdapter
@@ -17,23 +27,23 @@ import com.tenkitchen.classes.ItemModel
 import com.tenkitchen.classes.RetrofitManager
 import com.tenkitchen.interfaces.IMyRecyclerview
 import com.tenkitchen.interfaces.IPopupDialog
-import com.tenkitchen.objects.CommonUtil
-import com.tenkitchen.objects.Constants
+import com.tenkitchen.interfaces.MessageListener
+import com.tenkitchen.objects.*
 import com.tenkitchen.objects.Constants.TAG
-import com.tenkitchen.objects.RESPONSE_STATE
 import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONArray
 import org.json.JSONObject
 import java.time.LocalDate
 import java.util.*
-import kotlin.collections.ArrayList
+import kotlin.concurrent.thread
 
 
-class MainActivity : AppCompatActivity(), IMyRecyclerview, IPopupDialog {
+class MainActivity : AppCompatActivity(), IMyRecyclerview, IPopupDialog, MessageListener {
 
     private var m_itemAdapter: ItemAdapter? = null
     private var m_itemList: ArrayList<ItemModel>? = null
     private var m_date: String? = ""
+    //private val serverUrl = "ws://sock.tenkitchen.com:10085/echo"
 
     private val broadPush: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -50,6 +60,30 @@ class MainActivity : AppCompatActivity(), IMyRecyclerview, IPopupDialog {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
+        // 웹소켓
+        //WebSocketManager.init(serverUrl, this)
+        //webSocketConnect()
+
+        // MyService 백그라운드 서비스
+        /*var serviceBinder: MyService.MyBinder? = null
+        val connection: ServiceConnection = object: ServiceConnection {
+            override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+                // bindService() 함수로 서비스를 구동할때 자동으로 호출 됨
+                serviceBinder = service as MyService.MyBinder
+            }
+
+            override fun onServiceDisconnected(name: ComponentName?) {
+                // unbindService() 함수로 서비스를 종료할때 자동으로 호출 됨
+            }
+        }
+
+        val intent = Intent(this, MyService::class.java)
+        bindService(intent, connection, Context.BIND_AUTO_CREATE)
+
+        if ( serviceBinder != null ) {
+            serviceBinder?.funA(10)
+        }*/
 
         /*val br: BroadcastReceiver = AppBroadcastReceiver()
 
@@ -138,6 +172,8 @@ class MainActivity : AppCompatActivity(), IMyRecyclerview, IPopupDialog {
         m_date = currentDate.toString();
         
         getItemToServer(m_itemAdapter!!);
+
+        //WebSocketManager.reconnect()
     }
 
     override fun onPause() {
@@ -147,6 +183,7 @@ class MainActivity : AppCompatActivity(), IMyRecyclerview, IPopupDialog {
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(broadPush)
+        //WebSocketManager.close()
     }
 
     // 서버에서 데이터 가져오기
@@ -208,4 +245,193 @@ class MainActivity : AppCompatActivity(), IMyRecyclerview, IPopupDialog {
     override fun onConfirmButtonClicked() {
         Log.d(TAG, "onConfirmButtonClicked: called")
     }
+
+    // 웹소켓 연결
+    /*private fun webSocketConnect() {
+        thread {
+            kotlin.run {
+                WebSocketManager.connect()
+            }
+        }
+    }*/
+
+    // 웹소켓 메시지 전송
+    /*private fun webSocketSendMessage(message: String) {
+        if ( WebSocketManager.sendMessage(message)) {
+            Log.d(TAG, "webSocketSendMessage: Send from the client")
+        }
+    }*/
+
+    // 웹소켓 종료
+    /*private fun webSocketClose() {
+        WebSocketManager.close()
+    }*/
+
+    override fun onConnectSuccess() {
+        Log.d(TAG, "onConnectSuccess: Connected successfully")
+
+        /*val contentObj = JSONObject()
+        contentObj.put("client_num", 3)
+        contentObj.put("client_type", "A")
+
+        val encoder: Base64.Encoder = Base64.getEncoder()
+        val content: String = encoder.encodeToString(contentObj.toString().toByteArray())
+
+        val jobObj = JSONObject()
+        jobObj.put("job", 100000)
+        jobObj.put("content", content)
+
+        Log.d(TAG, "sendData: $jobObj")
+
+        webSocketSendMessage(jobObj.toString())*/
+    }
+
+    override fun onConnectFailed() {
+        Log.d(TAG, "onConnectFailed: Connection failed")
+    }
+
+    override fun onClose() {
+        Log.d(TAG, "onClose: Closed successfully")
+    }
+
+    override fun onMessage(text: String?) {
+        Log.d(TAG, "onMessage: Receive message: $text")
+
+        /*val messageObj = JSONObject(text)
+        val job = messageObj.getInt("job")
+        val content = messageObj.getString("content")
+
+        val decoder: Base64.Decoder = Base64.getDecoder()
+        val decoded = String(decoder.decode(content))
+        val contentObj = JSONObject(decoded)
+        val messageType = contentObj.getInt("message_type")
+        val message = contentObj.getString("message")
+
+        sendLocalPush(messageType, message);*/
+    }
+
+    /*private fun sendLocalPush( type: Int, message: String ) {
+        if ( type == 0 ) {
+            // QR코드를 찍음
+            if ( MyApp.isForeground ) {
+                Log.d(TAG, "onMessageReceived: 앱 실행중")
+                // 앱이 실행중일때
+                val intentPush = Intent(Constants.RESIEVE_PUSH)
+                this.sendBroadcast(intentPush)
+            } else {
+                Log.d(TAG, "onMessageReceived: 앱 실행중 아님")
+
+                // 화면 깨우기
+                val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
+                @SuppressLint("InvalidWakeLockTag") val wakeLock =
+                    pm.newWakeLock(
+                        PowerManager.FULL_WAKE_LOCK
+                                or PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG"
+                    )
+                wakeLock.acquire(3000)
+                wakeLock.release()
+
+                val remoteMessageData = mapOf(
+                    PushContents.title to "텐키친 파주운정점",
+                    PushContents.body to message!!
+                )
+
+                sendNotification(remoteMessageData)
+            }
+        } else {
+            // 결제함
+            if ( MyApp.isForeground ) {
+                Log.d(TAG, "onMessageReceived: 앱 실행중")
+                // 앱이 실행중일때
+                val intentPush = Intent(Constants.RESIEVE_PUSH)
+                this.sendBroadcast(intentPush)
+            } else {
+                Log.d(TAG, "onMessageReceived: 앱 실행중 아님")
+
+                // 화면 깨우기
+                val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
+                @SuppressLint("InvalidWakeLockTag") val wakeLock =
+                    pm.newWakeLock(
+                        PowerManager.FULL_WAKE_LOCK
+                                or PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG"
+                    )
+                wakeLock.acquire(3000)
+                wakeLock.release()
+
+                val remoteMessageData = mapOf(
+                    PushContents.title to "텐키친 파주운정점",
+                    PushContents.body to message!!
+                )
+
+                sendNotification(remoteMessageData)
+            }
+        }
+    }*/
+
+    /*private fun sendNotification(msgData: Map<String, String>) {
+
+        val body: String = msgData.getValue(PushContents.body)
+
+        // RequestCode, Id를 고유값으로 지정하여 알림이 개별 표시되도록 함
+        val uniId: Int = (System.currentTimeMillis() / 7).toInt()
+
+        // 인텐트 생성
+        val intent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            action = Intent.ACTION_MAIN
+            addCategory(Intent.CATEGORY_LAUNCHER)
+        }
+
+        // 일회용 PendingIntent : Intent 의 실행 권한을 외부의 어플리케이션에게 위임
+        val fullScreenPendingIntent = PendingIntent.getActivity(baseContext, uniId, intent, PendingIntent.FLAG_CANCEL_CURRENT)
+
+        // 알림 소리
+        val notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+
+        // head up 알림 생성하기
+        val notificationId = 1001
+        createNotificationChannel(this, NotificationManagerCompat.IMPORTANCE_HIGH, false, getString(R.string.app_name), "App notification channel")
+
+        val channelId = "$packageName-${getString(R.string.app_name)}"
+
+        // 푸시알람 부가설정
+        var notificationBuilder = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.ic_stat_black)
+            .setLargeIcon(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher_ten_foreground))
+            .setContentTitle("텐'키친 파주운정점")
+            .setContentText(body)
+            .setAutoCancel(true)
+            .setSound(notificationSound)
+            .setSubText("좋아 좋아~!!")
+            .setContentIntent(fullScreenPendingIntent)
+            .setPriority(NotificationCompat.VISIBILITY_PUBLIC)
+
+        var notificationManager: NotificationManager = this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(notificationId, notificationBuilder.build())
+    }*/
+
+    // NotificationChannel 만드는 메서드
+    /*private fun createNotificationChannel(context: Context, importance: Int, showBadge: Boolean, name: String, description: String) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channelId = "${context.packageName}-$name"
+            val channel = NotificationChannel(channelId, name, importance)
+            channel.description = description
+            channel.setShowBadge(showBadge)
+
+            val sound: Uri =
+                Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + context.packageName + "/" + R.raw.get_message_3)
+
+            val audioAttributes = AudioAttributes.Builder()
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .setUsage(AudioAttributes.USAGE_ALARM)
+                .build()
+            channel.enableLights(true)
+            channel.enableVibration(true)
+            channel.setSound(sound, audioAttributes)
+
+            val notificationManager = context.getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(channel)
+        }
+    }*/
 }
